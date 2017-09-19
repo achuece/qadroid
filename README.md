@@ -33,3 +33,22 @@ cd
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
  }
+
+ 2. Goto mlab.com (Mongo Lab) and launch the mongo db.
+ - Createa a database
+ - Create a DB user (which will be developer and you can manage the permissions)
+(Created a user qadroid / qadroid)
+- Update this url and place it in the below code:
+mongoose.connect("mongodb://qadroid:qadroid@ds141524.mlab.com:41524/qadroid");
+
+3. Probably set the env variable in the env you are working so you don't mess up the actual prod code.
+to set the env variable in local:
+export Database_Url="mongodb://localhost/qadroid" 
+
+Heroku:
+1. Goto Heroku - Settings - Config variables
+2. Add the env variable:
+Database_Url - mongodb://qadroid:qadroid@ds141524.mlab.com:41524/qadroid
+
+or do the steps mentioned in https://devcenter.heroku.com/articles/nodejs-support#customizing-the-build-process
+###heroku config:set MY_CUSTOM_VALUE=foobar

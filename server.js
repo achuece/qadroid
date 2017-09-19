@@ -17,11 +17,8 @@ var commentRoutes    = require("./routes/comments"),
     indexRoutes      = require("./routes/index")
     
 seedDB();
-// mongoose.connect("mongodb://localhost/qadroid", {
-//   useMongoClient: true,
-// });
 
-mongoose.connect("mongodb://qadroid:qadroid@ds141524.mlab.com:41524/qadroid", {
+mongoose.connect(process.env.Database_Url, {
   useMongoClient: true,
 });
 
