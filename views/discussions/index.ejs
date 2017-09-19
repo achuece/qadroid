@@ -1,0 +1,32 @@
+<% include ../partials/header %>
+
+     <div class="jumbotron">
+         <div class="container">
+             <h1 class="display-3">Let us discuss!</h1>
+             <p>
+                <a class="btn btn-primary btn-large" href="/discussions/new">Add New Discussion >></a>
+             </p>
+         </div>
+     </div>
+     
+     <% discussions.forEach(function(discussion) { %>
+      <div class="thumbnail discussion-thumbnail">
+         <a href="/discussions/<%= discussion._id %>">
+            <h2> <%= discussion.title %> </h2>
+            <p> <%= discussion.description %> </p>
+            <ul>
+               <% discussion.comments.forEach(function(commentId) { %>
+                  <li> <%= commentId %> </li>
+               <% }) %>
+            </ul>
+            <% if(discussion.image !== null) { %>
+               <div class="img-container">
+                  <img src="<%= discussion.image %>">      
+               </div>
+            <% } %>
+         </a>
+      </div>
+   <% }) %>
+
+
+<% include ../partials/footer %>
