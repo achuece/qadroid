@@ -23,23 +23,23 @@ router.post("/", middleware.isLoggedIn, function(req, res){
    //lookup discussion using ID
    Discussion.findById(req.params.id, function(err, discussion){
        if(err){
-            res.flash("error", "Something went wrong. Please try again.");
+            req.flash("error", "Something went wrong. Please try again.");
             res.redirect("/discussions");
        } else {
         var comment = req.body.comment;
-        comment.descriptionId = req.params.id;
+        comment.discussionId = req.params.id;
         comment.author = {
             id: req.user._id,
             name: req.user.firstName + " " + req.user.lastName
         };
         Comment.create(comment, function(err, commentCreated){
            if(err){
-               res.flash("error", "Something went wrong. Please try again.");
+               req.flash("error", "Something went wrong. Please try again.");
                res.redirect("/discussions/" + discussion._id);
            } else {
                discussion.comments.push(commentCreated);
                discussion.save();
-               res.flash("success", "Great! You have added your comment!");
+               req.flash("success", "Great! You have added your comment!");
                res.redirect("/discussions/" + discussion._id);
            }
         });
@@ -51,7 +51,7 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 router.get("/:comment_id/edit", middleware.checkCommentOwnership, function(req, res){
    Comment.findById(req.params.comment_id, function(err, foundComment){
       if(err){
-            res.flash("error", "Something went wrong. Please try again.");
+            req.flash("error", "Something went wrong. Please try again.");
             res.redirect("back");
       } else {
             res.render("comments/edit", {discussion_id: req.params.id, comment: foundComment});
@@ -63,10 +63,10 @@ router.get("/:comment_id/edit", middleware.checkCommentOwnership, function(req, 
 router.put("/:comment_id", middleware.checkCommentOwnership, function(req, res){
    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
       if(err){
-            res.flash("error", "Something went wrong. Please try again.");
+            req.flash("error", "Something went wrong. Please try again.");
             res.redirect("back");
       } else {
-            res.flash("success", "Nice! Your comment has been updated!");
+            req.flash("success", "Nice! Your comment has been updated!");
             res.redirect("/discussions/" + req.params.id );
       }
    });

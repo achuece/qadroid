@@ -24,6 +24,7 @@ router.post("/register", function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
     var confirmPassword = req.body.password_confirmation;
+    var avatar = req.body.avatar;
 
     if (password !== confirmPassword) {
         res.send("Invalid password"); //TODO: Add a flash card
@@ -32,7 +33,8 @@ router.post("/register", function(req, res) {
     var newUser = new User({
         firstName: firstName,
         lastName: lastName,
-        username: username
+        username: username,
+        avatar: avatar
     });
 
     User.register(newUser, password, function(err, registeredUser) {

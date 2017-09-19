@@ -36,10 +36,10 @@ router.post("/", middleware.isLoggedIn, function(req, res){
     // Create a new discussion and save to DB
     Discussion.create(newDiscussion, function(err, discussionCreated){
         if(err){
-            res.flash("error", "Something went wrong. Please try again.");
+            req.flash("error", "Something went wrong. Please try again.");
             res.redirect("back");
         } else {
-            res.flash("success", "Successfully deleted the discussion!");
+            req.flash("success", "Successfully deleted the discussion!");
             res.redirect("back");
         }
     });
@@ -59,11 +59,11 @@ router.get("/:id", function(req, res){
     //find the discussion with provided ID
     Discussion.findById(req.params.id).populate("comments").exec(function(err, foundDiscussion){
         if(err){
-            res.flash("error", "Something went wrong. Please try again.");
+            req.flash("error", "Something went wrong. Please try again.");
             res.redirect("back");
         } else {
             if (!foundDiscussion) {
-                res.flash("error", "Discussion not found.");
+                req.flash("error", "Discussion not found.");
                 res.redirect("back");
             }
             
@@ -83,7 +83,7 @@ router.get("/:id/edit", function(req, res) {
             res.redirect("/discussions");
         } else {
             if (!discussionFound) {
-                res.flash("error", "Discussion not found.");
+                req.flash("error", "Discussion not found.");
                 res.redirect("back");
             }
             
@@ -108,10 +108,10 @@ router.put("/:id", middleware.checkDiscussionOwnership, function(req, res) {
                 req.params.discussion,
                 function(err, updatedDiscussion) {
                    if (err) {
-                        res.flash("error", "Something went wrong. Please try again.");
+                        req.flash("error", "Something went wrong. Please try again.");
                         res.redirect("discussions/" + req.params.id)
                    } else {
-                        res.flash("success", "Successfully updated the discussion!");
+                        req.flash("success", "Successfully updated the discussion!");
                         res.redirect("discussions/" + req.params.id)
                    }
                 });
@@ -126,10 +126,10 @@ router.delete("/:id", middleware.checkDiscussionOwnership, function(req, res) {
         req.params.discussion,
         function(err, updatedDiscussion) {
             if (err) {
-                res.flash("error", "Something went wrong. Please try again.");
+                req.flash("error", "Something went wrong. Please try again.");
                 res.redirect("discussions/" + req.params.id)
            } else {
-                res.flash("success", "Successfully deleted the discussion!");
+                req.flash("success", "Successfully deleted the discussion!");
                 res.redirect("discussions/")
            }
         });

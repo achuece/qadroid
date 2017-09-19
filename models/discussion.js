@@ -4,6 +4,7 @@ var discussionSchema = mongoose.Schema({
    title: String,
    description: String,
    image: String,
+   date: { type: Date, default: Date.now },
    author: {
       id: {
              type: mongoose.Schema.Types.ObjectId,

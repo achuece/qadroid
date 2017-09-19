@@ -1,7 +1,7 @@
 <% include ../partials/header %>
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <p class="lead">Qadroid - Discussions</p>
             <div class="list-group">
                 <li class="list-group-item active">Info 1</li>
@@ -9,7 +9,7 @@
                 <li class="list-group-item">Info 3</li>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-10">
             <div class="thumbnail">
                 <div class="caption-full">
                     <h4><a><%=discussion.title%></a></h4>
@@ -25,138 +25,131 @@
                 </div>
             </div>
             
-            
-            
-            
-            
-            
-            
-            
-            <div class="well">
-                <div class="text-right">
-                    <a class="btn btn-success" href="/discussions/<%= discussion._id %>/comments/new">Add New Comment</a>
-                </div>
-                <hr>
-                <% discussion.comments.forEach(function(comment){ %>
-                    <div class="row">
-                           <p>
-                               <strong><%= comment.author.username %></strong>
-                               <span class="pull-right">10 days ago</span>
-                           </p>
-                           <div class="col-md-12">
-                               <p>
-                                  <%= comment.text %> 
-                               </p>
-                               <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
-                                   <a  class="btn btn-xs btn-warning" 
-                                       href="/campgrounds/<%=discussion._id %>/comments/<%=comment._id %>/edit">Edit</a>
-                                   <form id="delete-form" action="/discussions/<%=campground._id %>/comments/<%=comment._id %>?_method=DELETE" method="POST">
-                                       <input type="submit" class="btn btn-xs btn-danger" value="Delete">
-                                   </form>
-                               <% } %>
-                           </div>
-                    </div>
-                <% }) %>
-            </div>
-            
-            
-            
-            <div class="container">
-  <div class="row">
-    <div class="col-sm-10 col-sm-offset-1" id="logout">
-        <div class="comment-tabs">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#comments-logout" role="tab" data-toggle="tab"><h4 class="reviews text-capitalize">Comments</h4></a></li>
-                <li><a href="#add-comment" role="tab" data-toggle="tab"><h4 class="reviews text-capitalize">Add comment</h4></a></li>
-            </ul>            
-            <div class="tab-content">
-                <div class="tab-pane active" id="comments-logout">                
-                    <ul class="media-list">
-                      <li class="media">
-                        <a class="pull-left" href="#">
-                          <img class="media-object img-circle" src="https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg" alt="profile">
-                        </a>
-                        <div class="media-body">
-                          <div class="well well-lg">
-                              <h4 class="media-heading text-uppercase reviews">Username </h4>
-                              <ul class="media-date text-uppercase reviews list-inline">
-                                <li class="">Date</li>
-                              </ul>
-                              <p class="media-comment">
-                                Comment goes here
-                              </p>
-                              <div class="embed-responsive embed-responsive-16by9">
-                                  <iframe class="embed-responsive-item" src="//www.youtube.com/embed/80lNjkcp6gI" allowfullscreen></iframe>
-                              </div>
-                              <a class="btn btn-info btn-circle text-uppercase" href="#" id="reply"><span class="glyphicon glyphicon-share-alt"></span> Reply</a>
-                              <a class="btn btn-warning btn-circle text-uppercase" data-toggle="collapse" href="#replyOne"><span class="glyphicon glyphicon-comment"></span> 2 Replies</a>
-                          </div>              
-                        </div>
-                        <div class="collapse" id="replyOne">
+          <div class="row">
+            <div class="col-sm-10 col-sm-offset-1" id="logout">
+                <div class="comment-tabs">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#comments" role="tab" data-toggle="tab"><h4 class="reviews text-capitalize">Comments</h4></a></li>
+                        <li><a href="#add-comment" role="tab" data-toggle="tab"><h4 class="reviews text-capitalize">Add comment</h4></a></li>
+                    </ul>            
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="comments">                
                             <ul class="media-list">
-                                <li class="media media-replied">
-                                    <a class="pull-left" href="#">
-                                      <img class="media-object img-circle" src="https://s3.amazonaws.com/uifaces/faces/twitter/ManikRathee/128.jpg" alt="profile">
-                                    </a>
-                                    <div class="media-body">
-                                      <div class="well well-lg">
-                                          <h4 class="media-heading text-uppercase reviews"><span class="glyphicon glyphicon-share-alt"></span> Reply user name</h4>
-                                          <ul class="media-date text-uppercase reviews list-inline">
-                                            <li class="">Reply date</li>
-                                          </ul>
-                                          <p class="media-comment">
-                                            Reply goes here.
-                                          </p>
-                                      </div>              
+                                <% discussion.comments.forEach(function(comment){ %>
+                                     <li class="media">
+                                        <a class="pull-left" href="#">
+                                          <img class="media-object img-circle" src="<%= comment.author.avatar %>" alt="profile">
+                                        </a>
+                                        <div class="media-body">
+                                          <div class="well well-lg">
+                                              <h4 class="media-heading text-uppercase reviews"> <%= comment.author.firstName + " " + comment.author.lastName %> </h4>
+                                              <ul class="media-date text-uppercase reviews list-inline">
+                                                <li class=""><%= comment.date %></li>
+                                              </ul>
+                                              <p class="media-comment">
+                                                <%= comment.text %>
+                                              </p>
+                                              <div class="embed-responsive embed-responsive-16by9">
+                                                  <iframe class="embed-responsive-item" src="<%= comment.media %>" allowfullscreen></iframe>
+                                              </div>
+                                              <a class="btn btn-info btn-circle text-uppercase" data-toggle="collapse" href="#replyToComment" id="reply"><span class="glyphicon glyphicon-share-alt"></span> Reply</a>
+                                              
+                                              <% var replyCount = comment.replies.length; %>
+                                              <% var replyText; %>
+                                              <% if(replyCount > 0) { 
+                                                    if(replyCount > 1) { 
+                                                        replyText = "Replies"; 
+                                                    } else { 
+                                                        replyText = "Reply"; 
+                                                    } %>
+                                                  <a class="btn btn-warning btn-circle text-uppercase" data-toggle="collapse" href="#replyOne"><span class="glyphicon glyphicon-comment"></span> <%= comment.replies.length %> <%= replyText %></a>
+                                              <% } %>   
+                                              
+                                          </div>              
+                                        </div>
+                                        <div class="collapse" id="replyToComment">
+                                            <form action="/discussions/<%= discussion._id %>/comments/<%= comment._id %>/replies" method="post" class="form-horizontal" id="replyForm" role="form"> 
+                                                <div class="form-group">
+                                                    <label for="reply[text]" class="col-sm-2 control-label">Reply</label>
+                                                    <div class="col-sm-10">
+                                                      <textarea class="form-control" name="reply[text]" id="reply" rows="5"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="reply[media]" class="col-sm-2 control-label">Upload media</label>
+                                                    <div class="col-sm-10">                    
+                                                        <div class="input-group">
+                                                          <div class="input-group-addon"></div>
+                                                          <input type="text" class="form-control" name="reply[media]" id="media">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-sm-offset-2 col-sm-10">                    
+                                                        <button class="btn btn-success btn-circle text-uppercase" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Summit Reply</button>
+                                                    </div>
+                                                </div>            
+                                            </form>  
+                                        </div>
+                                        
+                                        <div class="collapse" id="replyOne">
+                                            <ul class="media-list">
+                                                <% comment.replies.forEach(function(reply){ %>
+                                                    <li class="media media-replied">
+                                                        <a class="pull-left" href="#">
+                                                          <img class="media-object img-circle" src="<%= reply.author.avatar %>" alt="profile">
+                                                        </a>
+                                                        <div class="media-body">
+                                                          <div class="well well-lg">
+                                                              <h4 class="media-heading text-uppercase reviews"><span class="glyphicon glyphicon-share-alt"></span> <%= reply.author.firstName + " " + reply.author.lastName %> </h4>
+                                                              <ul class="media-date text-uppercase reviews list-inline">
+                                                                <li class=""><%= reply.date %></li>
+                                                              </ul>
+                                                              <p class="media-comment">
+                                                                <%= reply.text %>
+                                                              </p>
+                                                              <div class="embed-responsive embed-responsive-16by9">
+                                                                  <iframe class="embed-responsive-item" src="<%= comment.media %>" allowfullscreen></iframe>
+                                                              </div>
+                                                          </div>              
+                                                        </div>
+                                                    </li>
+                                                <% }) %>
+                                            </ul>  
+                                        </div>
+                                    </li>         
+                                <% }) %>
+                            </ul> 
+                        </div>
+                        
+                        <div class="tab-pane" id="add-comment">
+                            <form action="/discussions/<%= discussion._id %>/comments/" method="post" class="form-horizontal" id="commentForm" role="form"> 
+                                <div class="form-group">
+                                    <label for="comment[text]" class="col-sm-2 control-label">Comment</label>
+                                    <div class="col-sm-10">
+                                      <textarea class="form-control" name="comment[text]" id="comment" rows="5"></textarea>
                                     </div>
-                                </li>
-                            </ul>  
-                        </div>
-                      </li>          
-
-
-                    </ul> 
-                </div>
-                <div class="tab-pane" id="add-comment">
-                    <form action="#" method="post" class="form-horizontal" id="commentForm" role="form"> 
-                        <div class="form-group">
-                            <label for="comment[text]" class="col-sm-2 control-label">Comment</label>
-                            <div class="col-sm-10">
-                              <textarea class="form-control" name="comment[text]" id="comment" rows="5"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="comment[media]" class="col-sm-2 control-label">Upload media</label>
-                            <div class="col-sm-10">                    
-                                <div class="input-group">
-                                  <div class="input-group-addon">http://</div>
-                                  <input type="text" class="form-control" name="comment[media]" id="media">
                                 </div>
-                            </div>
+                                <div class="form-group">
+                                    <label for="comment[media]" class="col-sm-2 control-label">Upload media</label>
+                                    <div class="col-sm-10">                    
+                                        <div class="input-group">
+                                          <div class="input-group-addon"></div>
+                                          <input type="text" class="form-control" name="comment[media]" id="media">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">                    
+                                        <button class="btn btn-success btn-circle text-uppercase" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Summit comment</button>
+                                    </div>
+                                </div>            
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">                    
-                                <button class="btn btn-success btn-circle text-uppercase" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Summit comment</button>
-                            </div>
-                        </div>            
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-	</div>
-  </div>
-
-  <div class="page-header text-center">
-    <h3 class="reviews"><span class="glyphicon glyphicon-magnet"></span> Uicomments by <a href="https://twitter.com/maridlcrmn">maridlcrmn</a></h3>
-  </div>
-  <div class="notes text-center"><small>Image credits: uifaces.com</small></div>
-</div>
-            
-            
-            
-            
-            
-            
+        	</div>
+          </div>
         </div>
     </div>
 </div>

@@ -12,13 +12,14 @@ var express = require("express"),
     seedDB = require("./seeds");
     
 //requiring routes
-var commentRoutes    = require("./routes/comments"),
-    discussionRoutes = require("./routes/discussions"),
+var discussionRoutes = require("./routes/discussions"),
+    commentRoutes    = require("./routes/comments"),
+    replyRoutes    = require("./routes/replies"),
     indexRoutes      = require("./routes/index")
     
 seedDB();
-
-mongoose.connect(process.env.Database_Url, {
+var dbUrl = process.env.Database_Url || "mongodb://localhost/qadroid";
+mongoose.connect(dbUrl, {
   useMongoClient: true,
 });
 
@@ -54,7 +55,10 @@ app.use(function(req, res, next){
 app.use("/", indexRoutes);
 app.use("/discussions", discussionRoutes);
 app.use("/discussions/:id/comments", commentRoutes);
+app.use("/discussions/:id/comments/:comment_id/replies", replyRoutes);
 
-app.listen(process.env.PORT, process.env.IP, function(){
+var ip = process.env.IP || "localhost";
+var port = process.env.PORT || "8080";
+app.listen(port, ip, function(){
     console.log("Qadroid Server has started!!!");
 });
