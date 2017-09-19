@@ -21,7 +21,7 @@ seedDB();
 //   useMongoClient: true,
 // });
 
-mongoose.connet("mongodb://qadroid:qadroid@ds141524.mlab.com:41524/qadroid", {
+mongoose.connect("mongodb://qadroid:qadroid@ds141524.mlab.com:41524/qadroid", {
   useMongoClient: true,
 });
 
